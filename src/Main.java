@@ -1,71 +1,58 @@
-import br.com.alura.screenmatch.calculos.CalculadoraDeTempo;
-import br.com.alura.screenmatch.calculos.FiltroRecomendacao;
-import br.com.alura.screenmatch.modelo.Episodio;
+package br.com.alura.screenmatch.principal;
+
 import br.com.alura.screenmatch.modelo.Filme;
 import br.com.alura.screenmatch.modelo.Serie;
+import br.com.alura.screenmatch.modelo.Titulo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class Main {
+public class PrincipalComListas {
     public static void main(String[] args) {
-        Filme meuFilme = new Filme();
-        meuFilme.setNome("O poderoso chefão");
-        meuFilme.setAnoDeLancamento(1970);
-        meuFilme.setDuracaoEmMinutos(180);
-
-        meuFilme.exibeFichaTecnica();
-        meuFilme.avalia(8);
-        meuFilme.avalia(5);
-        meuFilme.avalia(10);
-
-        System.out.println(meuFilme.getSomaDasAvaliacoes());
-        System.out.println(meuFilme.getTotalDeAvaliacoes());
-        System.out.println(meuFilme.pegaMedia());
-
-        Serie lost = new Serie();
-        lost.setNome("Lost");
-        lost.setAnoDeLancamento(2000);
-        lost.exibeFichaTecnica();
-        lost.setTemporadas(10);
-        lost.setEpisodiosPorTemporada(10);
-        lost.setMinutosPorEpisodio(50);
-        System.out.println("Duração para maratonar serie " + lost.getNome() +": " + lost.getDuracaoEmMinutos());
-
-        Filme avatar = new Filme();
-        avatar.setNome("Avatar");
-        avatar.setAnoDeLancamento(2023);
-        avatar.exibeFichaTecnica();
-        avatar.setDuracaoEmMinutos(200);
-
-        CalculadoraDeTempo calculadora = new CalculadoraDeTempo();
-        calculadora.inclui(meuFilme);
-        calculadora.inclui(avatar);
-        System.out.println(calculadora.getTempoTotal());
-
-        FiltroRecomendacao filtro = new FiltroRecomendacao();
-        filtro.filtra(meuFilme);
-
-        Episodio episodio = new Episodio();
-        episodio.setNumero(1);
-        episodio.setSerie(lost);
-        episodio.setTotalVisualizacoes(300);
-        filtro.filtra(episodio);
-
-        Filme filmeDoPaulo = new Filme();
-        filmeDoPaulo.setDuracaoEmMinutos(200);
-        filmeDoPaulo.setNome("Dogville");
-        filmeDoPaulo.setAnoDeLancamento(2003);
+        Filme meuFilme = new Filme("O poderoso chefão", 1970);
+        meuFilme.avalia(9);
+        Filme filmeDoPaulo = new Filme("Dogville", 2003);
         filmeDoPaulo.avalia(10);
+        Filme avatar = new Filme("Avatar", 2023);
+        avatar.avalia(6);
+        Serie lost = new Serie("Lost", 2000);
 
-        ArrayList<Filme> listaDeFilmes = new ArrayList<>();
-        listaDeFilmes.add(filmeDoPaulo);
-        listaDeFilmes.add(meuFilme);
-        listaDeFilmes.add(avatar);
-        System.out.println("Tamanho da lista: " + listaDeFilmes.size());
-        System.out.println("Primeiro filme: " + listaDeFilmes.get(0).getNome());
+        ArrayList<Titulo> lista = new ArrayList<>();
+        lista.add(filmeDoPaulo);
+        lista.add(meuFilme);
+        lista.add(avatar);
+        lista.add(lost);
 
-        System.out.println();
+        for (Titulo item: lista){       //Para cada variavel "item" do tipo "Titulo em "lista"
+            System.out.println(item.getNome());   //<- faz isso
+            if (item instanceof Filme filme && filme.getClassificacao() > 2){
+                System.out.println("Classificação " + filme.getClassificacao());
+            }
+        }
 
-        System.out.println(listaDeFilmes);
+        ArrayList<String> buscaPorArtista = new ArrayList<>();
+        buscaPorArtista.add("Adam Sandler");
+        buscaPorArtista.add("Paulo");
+        buscaPorArtista.add("Jacqueline");
+        System.out.println(buscaPorArtista);
+
+        Collections.sort(buscaPorArtista);
+        System.out.println("Depois da ordenação");
+        System.out.println(buscaPorArtista);
+        System.out.println("\nLista de titulos ordenadas");
+        Collections.sort(lista);
+
+        for (Titulo item: lista){
+            System.out.println(item);
+        }
+
+        System.out.println("\nOrdenando por ano de lançamento: ");
+        lista.sort(Comparator.comparing(Titulo::getAnoDeLancamento));
+
+        for (Titulo item: lista){
+            System.out.println(item);
+        }
     }
 }
