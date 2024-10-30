@@ -1,67 +1,76 @@
-package br.com.alura.screenmatch.principal;
+package br.com.alura.screenmatch.modelo;
 
-import br.com.alura.screenmatch.calculos.CalculadoraDeTempo;
-import br.com.alura.screenmatch.calculos.FiltroRecomendacao;
-import br.com.alura.screenmatch.modelo.Episodio;
-import br.com.alura.screenmatch.modelo.Filme;
-import br.com.alura.screenmatch.modelo.Serie;
+import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+public class Titulo implements Comparable<Titulo> {
+    @SerializedName("Title")
+    private String nome;
+    @SerializedName("Year")
+    private int anoDeLancamento;
+    private boolean incluidoNoPlano;
+    private double somaDasAvaliacoes;
+    private int totalDeAvaliacoes = 0;
+    private int duracaoEmMinutos;
 
-public class Main {
-    public static void main(String[] args) {
-        Filme meuFilme = new Filme("O poderoso chefão", 1970);
-        meuFilme.setDuracaoEmMinutos(180);
+    public Titulo(String nome, int anoDeLancamento) {
+        this.nome = nome;
+        this.anoDeLancamento = anoDeLancamento;
+    }
 
-        meuFilme.exibeFichaTecnica();
-        meuFilme.avalia(8);
-        meuFilme.avalia(5);
-        meuFilme.avalia(10);
+    public String getNome() {
+        return nome;
+    }
 
-        System.out.println(meuFilme.getSomaDasAvaliacoes());
-        System.out.println(meuFilme.getTotalDeAvaliacoes());
-        System.out.println(meuFilme.pegaMedia());
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-        Serie lost = new Serie("Lost", 2000);
-        lost.setNome("Lost");
-        lost.setAnoDeLancamento(2000);
-        lost.exibeFichaTecnica();
-        lost.setTemporadas(10);
-        lost.setEpisodiosPorTemporada(10);
-        lost.setMinutosPorEpisodio(50);
-        System.out.println("Duração para maratonar serie " + lost.getNome() +": " + lost.getDuracaoEmMinutos());
+    public void setAnoDeLancamento(int anoDeLancamento) {
+        this.anoDeLancamento = anoDeLancamento;
+    }
 
-        Filme avatar = new Filme("Avatar", 2023);
-        avatar.exibeFichaTecnica();
-        avatar.setDuracaoEmMinutos(200);
+    public int getAnoDeLancamento() {
+        return anoDeLancamento;
+    }
 
-        CalculadoraDeTempo calculadora = new CalculadoraDeTempo();
-        calculadora.inclui(meuFilme);
-        calculadora.inclui(avatar);
-        System.out.println(calculadora.getTempoTotal());
+    public int getDuracaoEmMinutos() {
+        return duracaoEmMinutos;
+    }
 
-        FiltroRecomendacao filtro = new FiltroRecomendacao();
-        filtro.filtra(meuFilme);
+    public void setDuracaoEmMinutos(int duracaoEmMinutos) {
+        this.duracaoEmMinutos = duracaoEmMinutos;
+    }
 
-        Episodio episodio = new Episodio();
-        episodio.setNumero(1);
-        episodio.setSerie(lost);
-        episodio.setTotalVisualizacoes(300);
-        filtro.filtra(episodio);
+    public double getSomaDasAvaliacoes() {
+        return somaDasAvaliacoes;
+    }
 
-        Filme filmeDoPaulo = new Filme("Dogville", 2003);
-        filmeDoPaulo.setDuracaoEmMinutos(200);
-        filmeDoPaulo.avalia(10);
+    public int getTotalDeAvaliacoes() {
+        return totalDeAvaliacoes;
+    }
 
-        ArrayList<Filme> listaDeFilmes = new ArrayList<>();
-        listaDeFilmes.add(filmeDoPaulo);
-        listaDeFilmes.add(meuFilme);
-        listaDeFilmes.add(avatar);
-        System.out.println("Tamanho da lista: " + listaDeFilmes.size());
-        System.out.println("Primeiro filme: " + listaDeFilmes.get(0).getNome());
+    public void exibeFichaTecnica(){
+        System.out.println("Nome do filme: " + nome);
+        System.out.println("Ano de Lançamento: " + anoDeLancamento);
+    }
 
-        System.out.println();
+    public void avalia(double nota){
+        somaDasAvaliacoes += nota;
+        totalDeAvaliacoes++;
+    }
 
-        System.out.println(listaDeFilmes);
+    public double pegaMedia(){
+        return somaDasAvaliacoes/totalDeAvaliacoes;
+    }
+
+    @Override
+    public int compareTo(Titulo outroTitulo) {
+        return this.getNome().compareTo(outroTitulo.getNome());
+    }
+
+    @Override
+    public String toString() {
+        return  "nome='" + nome + '\'' +
+                ", anoDeLancamento=" + anoDeLancamento;
     }
 }
