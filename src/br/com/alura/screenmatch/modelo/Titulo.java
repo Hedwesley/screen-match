@@ -1,11 +1,13 @@
 package br.com.alura.screenmatch.modelo;
 
-import com.google.gson.annotations.SerializedName;
+//import com.google.gson.annotations.SerializedName;
+
+import br.com.alura.screenmatch.excecao.ErroDeConversaoDeAnoException;
 
 public class Titulo implements Comparable<Titulo> {
-    @SerializedName("Title")
+//    @SerializedName("Title")
     private String nome;
-    @SerializedName("Year")
+//    @SerializedName("Year")
     private int anoDeLancamento;
     private boolean incluidoNoPlano;
     private double somaDasAvaliacoes;
@@ -16,6 +18,17 @@ public class Titulo implements Comparable<Titulo> {
         this.nome = nome;
         this.anoDeLancamento = anoDeLancamento;
     }
+
+    public Titulo(TituloOmdb meuTituloOmdb) {
+        if(meuTituloOmdb.year().length() > 4){
+            throw new ErroDeConversaoDeAnoException("Não consegui converter o ano " + meuTituloOmdb.year() +
+                    " porquê tem mais de 04 cacteres.");
+        }
+        this.nome = meuTituloOmdb.title();
+        this.anoDeLancamento = Integer.valueOf(meuTituloOmdb.year());
+        this.duracaoEmMinutos = Integer.valueOf(meuTituloOmdb.runtime().substring(0, 3));
+    }
+
 
     public String getNome() {
         return nome;
@@ -63,6 +76,7 @@ public class Titulo implements Comparable<Titulo> {
         return somaDasAvaliacoes/totalDeAvaliacoes;
     }
 
+
     @Override
     public int compareTo(Titulo outroTitulo) {
         return this.getNome().compareTo(outroTitulo.getNome());
@@ -70,7 +84,8 @@ public class Titulo implements Comparable<Titulo> {
 
     @Override
     public String toString() {
-        return  "nome='" + nome + '\'' +
-                ", anoDeLancamento=" + anoDeLancamento;
+        return  "nome = '" + nome + '\'' +
+                "\nAno de Lançamento = " + anoDeLancamento +
+                "\nDuração = " + duracaoEmMinutos + " min";
     }
 }
